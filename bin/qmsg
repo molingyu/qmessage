@@ -18,7 +18,8 @@ case param
   else
     if File::exist?(param)
       open(param, 'r') do |input|
-        str = QMsg.run input.read
+        qms = QMsg.run input.read
+        str = qms.to_json
         open("#{File.dirname(param)}/output.json", 'w'){ |f| f.write str }
       end
     else

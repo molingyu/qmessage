@@ -1,33 +1,17 @@
 require "qmessage/version"
-
+require 'json'
 module QMsg
 
+  QQMessage = Struct.new(:time, :u_name, :u_code, :message)
+
   class QQMessage
-
-    attr_accessor :time
-    attr_accessor :u_name
-    attr_accessor :u_code
-    attr_accessor :message
-
-    def initialize(time, u_name, u_code, message)
-      @time = time
-      @u_name = u_name
-      @u_code = u_code
-      @message = message
+    def to_json(num)
+      self.to_h.to_json(num)
     end
-
-    def to_json
-      "{\"time\":#{@time},\"u_name\":#{@u_name}\"u_code\":#{@u_code}\"message\":#{@message}}"
-    end
-
-  end
-
-  class QQMessageList < Array
-    alias :to_json :to_s
   end
 
   def self.run(str)
-    @messages = QQMessageList.new
+    @messages = []
     qq_message = nil
     m_str = ''
     str.split("\n").each do |m|
