@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Always look in the lib directory of this gem
+# first when searching the load path
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require "qmessage"
+
+param = ENV[0]
+
+case param
+  when '-h'
+    puts "QQ 消息处理器。用于将导出为txt格式的QQ消息转换为格式化数据(json)。"
+    puts "command:"
+    puts "\t <file path> input file path."
+    puts "\t -v Show Qmsg version info."
+    puts "\t-h Show this message."
+  when '-v'
+    print QMsg::VERSION
+  else
+    file = File.new("input.txt", "r+")
+    if file
+      str = file.read
+      str = QMsg.run str
+      open("#{File.dirname(param)}/output.json"){ |f| f.write str }
+    else
+      puts "file path error!(#{param})"
+    end
+end
+
