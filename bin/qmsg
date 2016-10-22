@@ -1,14 +1,10 @@
 #!/usr/bin/env ruby
-# frozen_string_literal: true
-
-# Always look in the lib directory of this gem
-# first when searching the load path
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require "qmessage"
 
-param = ENV[0]
+param = ARGV[0]
 
 case param
   when '-h'
@@ -20,11 +16,11 @@ case param
   when '-v'
     print QMsg::VERSION
   else
-    file = File.new("input.txt", "r+")
-    if file
-      str = file.read
-      str = QMsg.run str
-      open("#{File.dirname(param)}/output.json"){ |f| f.write str }
+    if File::exist?(param)
+      open(param, 'r') do |input|
+        str = QMsg.run input.read
+        open("#{File.dirname(param)}/output.json", 'w'){ |f| f.write str }
+      end
     else
       puts "file path error!(#{param})"
     end
