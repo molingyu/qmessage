@@ -21,7 +21,7 @@ module QMsg
           @messages.push(qq_message)
           m_str = ''
         end
-        if m[/([0-9]{3}\-[0-9]{,2}\-[0-9]{,2}) ([0-9]{,2}):([0-9]{,2}):([0-9]{,2}) ([A-Z][A-Z]) (.*)\(([0-9]*)\)/]
+        if m[/([0-9]{4}\-[0-9]{,2}\-[0-9]{,2}) ([0-9]{,2}):([0-9]{,2}):([0-9]{,2})[ ]*([A-Z]{,2})[ ]*([^ ]*)\((.*)\)/]
           data = Time.gm(*$1.split('-'), time12for24($2.to_i, $5), $3, $4)
           u_name = $6
           u_code = $7
@@ -37,6 +37,7 @@ module QMsg
 
     private
     def time12for24(time, type)
+      return time if type == ''
       if type == 'PM' || type == 'pm'
         return 0 if time == 12
         time + 12
